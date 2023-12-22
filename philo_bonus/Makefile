@@ -8,13 +8,20 @@ WHITE	= '\033[37m'
 NONE	= '\033[0m'
 
 SRCS = 	./src/ft_args.c \
-	./src/ft_atoi.c \
+	./src/ft_atoi.c 	\
+	./src/ft_error.c 	\
+	./src/ft_kill.c 	\
+	./src/ft_routine.c  \
+	./src/init_all.c 	\
+	./src/open_sem.c 	\
+	./src/philo_utils.c \
+	./src/printer.c 	\
 	./src/main.c
 
  
 OBJS = $(SRCS:.c=.o)
 
-NAME = philo
+NAME = philo_bonus
 
 CC = gcc
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migonzal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 09:29:51 by migonzal          #+#    #+#             */
-/*   Updated: 2022/07/20 10:28:35 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/22 08:19:21 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 # include <sys/time.h>
 # include <stdbool.h>
 # include <limits.h>
+
+#define SEM_NAME_FORKS "/philo_global_forks"
+#define SEM_NAME_WRITE "/philo_global_write"
+#define SEM_NAME_FILL  "/philo_global_full"
+#define SEM_NAME_DEAD  "/philo_global_dead"
+#define SEM_NAME_STOP  "/philo_global_stop"
+#define SENM_NAME_MEAL "/philo_local_meal"
 
 typedef struct s_args
 {
