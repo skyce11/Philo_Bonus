@@ -118,6 +118,7 @@ size_t ft_strlen(const char *str);
 char *ft_itoa(int n, size_t len);
 void unlink_all(void);
 bool start_killer_threads(t_args *args);
+void print_sem_value(sem_t *sem);
 
 //INIT_ALLL
 char 	*set_meal_name(const char*str, int index);

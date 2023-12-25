@@ -99,14 +99,18 @@ int sem_error_cleaner(t_args *args)
 
 int args_cleaner(t_args *args, int exit_code)
 {
-	pthread_join(args->first_die_kill, NULL);
-	pthread_join(args->finish_meals_kill, NULL);
-	sem_close(args->sem_forks);
-	sem_close(args->sem_write);
-	sem_close(args->sem_philo_full);
-	sem_close(args->sem_philo_dead);
-	sem_close(args->sem_stop);
-	unlink_all();
-	free_args(args);
+	if (args != NULL)
+	{
+		pthread_join(args->first_die_kill, NULL);
+		pthread_join(args->finish_meals_kill, NULL);
+		sem_close(args->sem_forks);
+		sem_close(args->sem_write);
+		sem_close(args->sem_philo_full);
+		sem_close(args->sem_philo_dead);
+		sem_close(args->sem_stop);
+		unlink_all();
+		free_args(args);
+
+	}
 	exit(exit_code);
 }

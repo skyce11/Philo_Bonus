@@ -80,3 +80,17 @@ bool start_killer_threads(t_args *args)
 		return (error_failure("%s error: Could not create thread.\n", NULL, args));
 	return (true);
 }
+
+
+void print_sem_value(sem_t *sem)
+{
+    int value;
+    if (sem_getvalue(sem, &value) == 0)
+    {
+        printf("Semáforo valor: %d\n", value);
+    }
+    else
+    {
+        perror("Error al obtener el valor del semáforo");
+    }
+}
