@@ -18,12 +18,13 @@ void ft_routine(t_philo *philo)
 {
 	if (philo->index % 2)
 		think_routine(philo, true);
-	while(1)
+	while (1)
 	{
 		eat_sleep_routine(philo);
 		think_routine(philo, false);
 	}
 }
+
 
 
 
@@ -48,7 +49,7 @@ void start_routine(t_args *args)
 	if (philo->args->n_philo == 1)
 		only_one_philo(philo);
 	open_semaphores(args, philo);
-	if (philo->args->must_eat_count == 0)
+	if (philo->args->n_meal == 0)
 	{
 		sem_post(philo->sem_philo_full);
 		child_exit(args, CHILD_EXIT_PHILO_FULL);
@@ -87,7 +88,9 @@ void eat_sleep_routine(t_philo *philo)
 
 void think_routine(t_philo *philo, bool silent)
 {
+	printf("Entro aqui alguna vez\n");
 	time_t time_to_think;
+
 	sem_wait(philo->sem_meal);
 	time_to_think = (philo->args->t_die - (ft_get_timestamp()
 		- philo->last_meal) - philo->args->t_eat) / 2;
@@ -100,7 +103,7 @@ void think_routine(t_philo *philo, bool silent)
 		time_to_think = 200;
 	if (silent == false)
 		print_general_status(philo, false, THINKING);
-	philo_sleep(philo->args->t_sleep);
+	philo_sleep(time_to_think);
 }
 
 

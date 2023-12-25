@@ -8,20 +8,18 @@ void run_start_delay(int zero_time)
 
 time_t	ft_get_timestamp(void)
 {
-	struct timeval tv;
+	struct timeval		tv;
 
-       gettimeofday(&tv, NULL);
-       return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-
-
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-
-void philo_sleep(int t_sleep)
+void	philo_sleep(time_t sleep_time)
 {
-	time_t wake_up;
+	time_t	wake_up;
 
-	wake_up = ft_get_timestamp() + t_sleep;
+	wake_up = ft_get_timestamp() + sleep_time;
+	//printf("Valor de ft_get_timestamp: %ld\n", ft_get_timestamp());
 	while (ft_get_timestamp() < wake_up)
 	{
 		usleep(100);

@@ -48,7 +48,7 @@ bool start_run(t_args *args)
 	int i;
 	pid_t pid;
 
-	args->zero_time = ft_get_timestamp() + ((args->n_philo * 2) *10);
+	args->zero_time = ft_get_timestamp(); /*+ ((args->n_philo * 2) * 10);*/
 	i = -1;
 	while (++i < args->n_philo)
 	{
@@ -111,9 +111,10 @@ int main(int argc, char **argv)
   t_args *args;
 
   args = NULL;
-  if (n_argc(argc, args))
-    return (2);
-  // revisar mas mierda
+  if (argc -1  < 4 || argc -1 > 5)
+	return (print_msg("Incorrect args", NULL, EXIT_FAILURE));
+  if (!is_valid_input(argc, argv))
+	return (EXIT_FAILURE);
   args = init_args(argc, argv, 1);
   if (!args)
 	return (EXIT_FAILURE);

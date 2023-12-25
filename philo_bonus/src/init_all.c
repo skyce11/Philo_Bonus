@@ -115,16 +115,15 @@ t_args *init_args(int argc, char **argv, int i)
 		return (error_null("%s error: Could not allocate memory.\n", NULL, 0)); // Funcion de error aqui
 
 
-	args->n_philo = ft_atoi(argv[i++]);
-	args->t_die = ft_atoi(argv[i++]);
-	args->t_eat = ft_atoi(argv[i++]);
-	args->t_sleep = ft_atoi(argv[i++]);
+	args->n_philo = integer_atoi(argv[i++]);
+	args->t_die = integer_atoi(argv[i++]);
+	args->t_eat = integer_atoi(argv[i++]);
+	args->t_sleep = integer_atoi(argv[i++]);
+	args->n_meal = -1;
 	args->philo_full_count = 0;
 	args->stop_run = false;
 	if (argc == 6)
-  		args->n_meal = ft_atoi(argv[i]);
-	else
-  		args->n_meal = -1;
+  		args->n_meal = integer_atoi(argv[i]);
 	if (!init_semaphores(args))
 		return (NULL);
 	args->philos = init_philos(args);

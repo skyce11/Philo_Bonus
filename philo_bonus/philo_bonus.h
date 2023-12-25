@@ -50,34 +50,37 @@ typedef struct s_args
   time_t				t_die;
   time_t				t_eat;
   time_t				t_sleep;
-  int				n_meal;  //posible problem here
-  int				must_eat_count;
-  int				philo_full_count;
+  int				    n_meal;  //posible problem here
+ // int				must_eat_count;
+  
 
-  bool 				stop_run;
+ 
 
   sem_t             *sem_forks;
   sem_t             *sem_write;
   sem_t				*sem_philo_full;
+  int				philo_full_count;
   sem_t             *sem_philo_dead;
   sem_t				*sem_stop;
-
+  bool 				stop_run;
+  t_philo			*actual_philo;
+  t_philo			**philos;
   pid_t 			*pids;
 
   pthread_t			finish_meals_kill;
   pthread_t			first_die_kill;
 
-  t_philo			**philos;
-  t_philo			*actual_philo;
+  
 
 
 } t_args;
 
 typedef struct s_philo
 {
+    pthread_t	personal_killer;
 	int		index;
 	int		times_eat;
-    int     last_meal;
+    time_t     last_meal;
 
 	int		forks_picked;
     bool    hungry;
@@ -92,7 +95,7 @@ typedef struct s_philo
 	char 		*sem_meal_name;
 	
     t_args          *args;
-	pthread_t	personal_killer;
+	
 
 
 
@@ -124,11 +127,12 @@ bool init_semaphores(t_args *args);
 t_args *init_args(int argc, char **argv, int i);
 
 // FT_ARGS
+bool only_digits(char *str);
+int	integer_atoi(char *str);
+bool is_valid_input(int argc, char **argv);
 
-int n_argc(int argc, t_args *args);
 
-//FT_ATOI
-int ft_atoi(const char *str);
+
 
 // FT_ERROR
 int print_msg(char *str, char *aux, int exit_number);
@@ -175,7 +179,7 @@ void open_semaphores(t_args *args, t_philo *philo);
 
 void run_start_delay(int zero_time);
 time_t	ft_get_timestamp(void);
-void philo_sleep(int t_sleep);
+void philo_sleep(time_t sleep_time);
 
 
 
