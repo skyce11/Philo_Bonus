@@ -12,26 +12,11 @@
 
 # include "../philo_bonus.h"
 
-int	ft_get_timestamp(void)
-{
-	int				res;
-	struct timeval	time;
 
-	gettimeofday(&time, NULL);
-	res = time.tv_sec * 1000 + time.tv_usec / 1000;
-	return (res);
-}
 
-void philo_sleep(int t_sleep)
-{
-	int wake_up;
 
-	wake_up = ft_get_timestamp() + t_sleep;
-	while (ft_get_timestamp() < wake_up)
-	{
-		usleep(100);
-	}
-}
+
+
 
 int get_child_exit_die(t_args *args, pid_t *pid)
 {
@@ -62,7 +47,8 @@ bool start_run(t_args *args)
 {
 	int i;
 	pid_t pid;
-	args->zero_time = ft_get_timestamp();
+
+	args->zero_time = ft_get_timestamp() + ((args->n_philo * 2) *10);
 	i = -1;
 	while (++i < args->n_philo)
 	{
@@ -74,7 +60,7 @@ bool start_run(t_args *args)
 		else if (pid == 0)
 		{
 			args->actual_philo = args->philos[i];
-			//philo routine
+			start_routine(args);
 		}
 	}
 	if (start_killer_threads(args) == false)
@@ -87,7 +73,7 @@ int stop_run(t_args *args)
 	int i;
 	int exit_code;
 
-	//delay
+	run_start_delay(args->zero_time);
 	
 	while(run_stopped(args) == false)
 	{

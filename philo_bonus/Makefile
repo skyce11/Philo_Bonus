@@ -16,6 +16,7 @@ SRCS = 	./src/ft_args.c \
 	./src/open_sem.c 	\
 	./src/philo_utils.c \
 	./src/printer.c 	\
+	./src/time_utils.c 	\
 	./src/main.c
 
  
@@ -36,7 +37,7 @@ all: $(NAME)
 	@$(CC) $(CFLAGS) $(ASAN_FLAGS) -c $< -o $@ 
 
 $(NAME): $(OBJS)
-	@$(CC) -o $(NAME) $(OBJS) -g3 -fsanitize=thread
+	@$(CC) -o $(NAME) $(OBJS) 
 	@echo $(GREEN) $(NAME)": All ready to work"
 
 clean:

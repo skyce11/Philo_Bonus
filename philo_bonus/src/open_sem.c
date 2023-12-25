@@ -24,6 +24,10 @@ bool open_global_semaphores(t_philo *philo)
 		return (false);
 	philo->sem_philo_full = sem_open(SEM_NAME_DEAD, O_CREAT,
 						S_IRUSR | S_IWUSR, philo->args->n_philo);
+	if (philo->sem_philo_full == SEM_FAILED)
+		return (false);
+	philo->sem_philo_dead = sem_open(SEM_NAME_DEAD, O_CREAT,
+						S_IRUSR | S_IWUSR, philo->args->n_philo);
 	if (philo->sem_philo_dead == SEM_FAILED)
 		return (false);
 	return (true);

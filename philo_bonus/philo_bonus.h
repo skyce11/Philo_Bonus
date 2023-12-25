@@ -45,12 +45,12 @@ typedef struct s_philo t_philo;
 
 typedef struct s_args
 {
-  int				n_philo;
-  int				t_die;
-  int				t_eat;
-  int				t_sleep;
-  int				n_meal;
-  int               zero_time;
+  time_t               zero_time;
+  int				    n_philo;
+  time_t				t_die;
+  time_t				t_eat;
+  time_t				t_sleep;
+  int				n_meal;  //posible problem here
   int				must_eat_count;
   int				philo_full_count;
 
@@ -118,7 +118,7 @@ bool start_killer_threads(t_args *args);
 
 //INIT_ALLL
 char 	*set_meal_name(const char*str, int index);
-int set_philo_meal_name(t_philo *philo);
+bool set_philo_meal_name(t_philo *philo);
 t_philo		**init_philos(t_args *args);
 bool init_semaphores(t_args *args);
 t_args *init_args(int argc, char **argv, int i);
@@ -140,9 +140,10 @@ int args_cleaner(t_args *args, int exit_code);
 int sem_error_cleaner(t_args *args);
 
 //MAIN
-void philo_sleep(int t_sleep);
+
 bool run_stopped(t_args *args);
-int	ft_get_timestamp(void);
+
+
 
 
 //PRINTER
@@ -168,6 +169,14 @@ void only_one_philo(t_philo *philo);
 bool open_global_semaphores(t_philo *philo);
 bool open_local_semaphores(t_philo *philo);
 void open_semaphores(t_args *args, t_philo *philo);
+
+
+// Time_utils
+
+void run_start_delay(int zero_time);
+time_t	ft_get_timestamp(void);
+void philo_sleep(int t_sleep);
+
 
 
 

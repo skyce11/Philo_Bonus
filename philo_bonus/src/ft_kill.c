@@ -34,7 +34,10 @@ void *first_die_kill(void *aux)
 	args = (t_args*) aux;
 	if (args->n_philo == 1)
 		return (NULL);
-	//delay
+	run_start_delay(args->zero_time);
+	if (run_stopped(args) == true)
+		return (NULL);
+	sem_wait(args->sem_philo_dead);
 	if (run_stopped(args) == true)
 		return (NULL);
 	sem_wait(args->sem_stop);
@@ -50,15 +53,18 @@ void *finish_meals_kill(void *aux)
 	t_args *args;
 
 	args = (t_args*) aux;
-	if (args->must_eat_count < 0 || args->t_die == 0
+	if (args->n_meal < 0 || args->t_die == 0
 		|| args->n_philo == 1)
 		return (NULL);
-	// delay
+	run_start_delay(args->zero_time);
 	while (args->philo_full_count < args->n_philo)
 	{
 		if (run_stopped(args) == true)
+			return (NULL);
+		sem_wait(args->sem_philo_full);
+		if (run_stopped(args) == false)
 			args->philo_full_count += 1;
-		else
+		else 
 			return (NULL);
 	}
 	sem_wait(args->sem_stop);
@@ -79,8 +85,8 @@ bool kill_trigger(t_args  *args, t_philo *philo)
 		sem_post(philo->sem_meal);
 		return (true);
 	}
-	if (args->must_eat_count != 1  && philo->satisfied == false
-		&& philo->times_eat >= args->must_eat_count)
+	if (args->n_meal != 1  && philo->satisfied == false
+		&& philo->times_eat >= args->n_meal)
 	{
 		sem_post(philo->sem_philo_full);
 		philo->satisfied = true;
@@ -92,12 +98,13 @@ bool kill_trigger(t_args  *args, t_philo *philo)
 void *killler(void *aux)
 {
 	t_args *args;
+
 	args = (t_args*)aux;
-	if (args->must_eat_count == 0)
+	if (args->n_meal == 0)
 		return (NULL);
 	sem_wait(args->actual_philo->sem_philo_dead);
 	sem_wait(args->actual_philo->sem_philo_full);
-	//delay
+	run_start_delay(args->zero_time);
 	while(!kill_trigger(args, args->actual_philo))
 	{
 		usleep(1000);

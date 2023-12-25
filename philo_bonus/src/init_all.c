@@ -43,12 +43,12 @@ char 	*set_meal_name(const char*str, int index)
 	return (sem_name);
 }
 
-int set_philo_meal_name(t_philo *philo)
+bool set_philo_meal_name(t_philo *philo)
 {
 	philo->sem_meal_name = set_meal_name(SEM_NAME_MEAL, philo->index +1);
 	if (philo->sem_meal_name == NULL)
-		return (0);
-	return (1);
+		return (false);
+	return (true);
 }
 
 t_philo		**init_philos(t_args *args)
@@ -119,6 +119,8 @@ t_args *init_args(int argc, char **argv, int i)
 	args->t_die = ft_atoi(argv[i++]);
 	args->t_eat = ft_atoi(argv[i++]);
 	args->t_sleep = ft_atoi(argv[i++]);
+	args->philo_full_count = 0;
+	args->stop_run = false;
 	if (argc == 6)
   		args->n_meal = ft_atoi(argv[i]);
 	else

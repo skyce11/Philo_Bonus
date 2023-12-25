@@ -90,6 +90,7 @@ int sem_error_cleaner(t_args *args)
 	sem_close(args->sem_forks);
 	sem_close(args->sem_write);
 	sem_close(args->sem_philo_full);
+	sem_close(args->sem_philo_dead);
 	sem_close(args->sem_stop);
 	unlink_all();
 	return (error_failure("%s error: Could not create semaphore.\n", NULL, args));

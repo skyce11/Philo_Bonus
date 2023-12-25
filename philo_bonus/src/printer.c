@@ -15,7 +15,7 @@
 
 void	print_status(t_philo *philo, char *str)
 {
-	printf("%d %d %s\n", ft_get_timestamp() - philo->args->zero_time,
+	printf("%ld %d %s\n", ft_get_timestamp() - philo->args->zero_time,
 		philo->index + 1, str);
 }
 

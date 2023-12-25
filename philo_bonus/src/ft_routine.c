@@ -18,12 +18,10 @@ void ft_routine(t_philo *philo)
 {
 	if (philo->index % 2)
 		think_routine(philo, true);
+	while(1)
 	{
-		while(1)
-		{
-			eat_sleep_routine(philo);
-			think_routine(philo, false);
-		}
+		eat_sleep_routine(philo);
+		think_routine(philo, false);
 	}
 }
 
@@ -47,7 +45,7 @@ void start_routine(t_args *args)
 	t_philo *philo;
 
 	philo = args->actual_philo;
-	if (philo->args->n_philo)
+	if (philo->args->n_philo == 1)
 		only_one_philo(philo);
 	open_semaphores(args, philo);
 	if (philo->args->must_eat_count == 0)
@@ -63,7 +61,7 @@ void start_routine(t_args *args)
 	sem_wait(philo->sem_meal);
 	philo->last_meal = philo->args->zero_time;
 	sem_post(philo->sem_meal);
-	//delay
+	run_start_delay(philo->args->zero_time);
 	ft_routine(philo);
 }
 
@@ -89,10 +87,10 @@ void eat_sleep_routine(t_philo *philo)
 
 void think_routine(t_philo *philo, bool silent)
 {
-	int time_to_think;
+	time_t time_to_think;
 	sem_wait(philo->sem_meal);
 	time_to_think = (philo->args->t_die - (ft_get_timestamp()
-		- philo->last_meal)) - philo->args->t_eat / 2;
+		- philo->last_meal) - philo->args->t_eat) / 2;
 	sem_post(philo->sem_meal);
 	if (time_to_think < 0)
 		time_to_think = 0;
@@ -112,8 +110,9 @@ void only_one_philo(t_philo *philo)
 					S_IRUSR | S_IWUSR, philo->args->n_philo);
 	if (philo->sem_philo_full == SEM_FAILED)
 		exit(CHILD_EXIT_ERROR_SEM);
-	//delay
-	if (philo->args->must_eat_count == 0)
+	sem_wait(philo->sem_philo_full);
+	run_start_delay(philo->args->zero_time);
+	if (philo->args->n_meal == 0)
 	{
 		sem_post(philo->sem_philo_full);
 		exit(CHILD_EXIT_ERROR_SEM);
