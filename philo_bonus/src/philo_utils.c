@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:34 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 14:27:11 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 12:48:56 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char *ft_strcat(char *dst, const char *src)
 	return (dst);
 }
 
-char *ft_itoa(int n, size_t len)
+char *ft_utoa(unsigned int n, size_t len)
 {
 	char *aux;
 
@@ -73,24 +73,24 @@ void unlink_all(void)
 bool start_killer_threads(t_args *args)
 {
 	if (pthread_create(&args->finish_meals_kill, NULL,
-			&finish_meals_kill, args) != 0)
-		return (error_failure("%s error: Could not create thread.\n", NULL, args));
+			&ft_finish_meals_kill, args) != 0)
+		return (error_failure(STR_ERR_THREAD, NULL, args));
 	if (pthread_create(&args->first_die_kill, NULL,
-				&first_die_kill, args) != 0)
-		return (error_failure("%s error: Could not create thread.\n", NULL, args));
+				&ft_first_die_kill, args) != 0)
+		return (error_failure(STR_ERR_THREAD, NULL, args));
 	return (true);
 }
 
 
-void print_sem_value(sem_t *sem)
-{
-    int value;
-    if (sem_getvalue(sem, &value) == 0)
-    {
-        printf("Semáforo valor: %d\n", value);
-    }
-    else
-    {
-        perror("Error al obtener el valor del semáforo");
-    }
-}
+// void print_sem_value(sem_t *sem)
+// {
+//     int value;
+//     if (sem_getvalue(sem, &value) == 0)
+//     {
+//         printf("Semáforo valor: %d\n", value);
+//     }
+//     else
+//     {
+//         perror("Error al obtener el valor del semáforo");
+//     }
+// }

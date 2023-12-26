@@ -9,6 +9,7 @@ NONE	= '\033[0m'
 
 SRCS = 	./src/ft_args.c \
 	./src/ft_error.c 	\
+	./src/cleaner.c 	\
 	./src/ft_kill.c 	\
 	./src/ft_routine.c  \
 	./src/init_all.c 	\

@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:52:50 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 14:31:12 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 12:51:03 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,19 @@
 
 
 
-
-
-
-
-int get_child_exit_die(t_args *args, pid_t *pid)
+bool run_stopped(t_args *args)
 {
-	int philo_exit_code;
-	int exit_code;
+	bool aux;
 
-	if (*pid && waitpid(*pid, &philo_exit_code, WNOHANG) != 0)
-	{
-		if (WIFEXITED(philo_exit_code))
-		{
-			exit_code = WEXITSTATUS(philo_exit_code);
-			if (exit_code == CHILD_EXIT_PHILO_DEAD)
-				return (kill_philos(args, 1));
-			if (exit_code == CHILD_EXIT_ERROR_PTHREAD ||
-				exit_code  == CHILD_EXIT_ERROR_SEM)
-				return (kill_philos(args, -1));
-			if (exit_code == CHILD_EXIT_PHILO_FULL)
-			{
-				args->philo_full_count +=1;
-				return (1);
-			}
-		}
-	}
-	return (0);
+	sem_wait(args->sem_stop);
+	aux = args->stop_run;
+	sem_post(args->sem_stop);
+	return (aux);
 }
 
-bool start_run(t_args *args)
+static bool start_run(t_args *args)
 {
-	int i;
+	unsigned int i;
 	pid_t pid;
 
 	args->zero_time = ft_get_timestamp(); /*+ ((args->n_philo * 2) * 10);*/
@@ -54,7 +35,7 @@ bool start_run(t_args *args)
 	{
 		pid = fork();
 		if (pid == -1)
-			return (error_failure("%s error: Could not fork child.\n", NULL, args));
+			return (error_failure(STR_ERR_FORK, NULL, args));
 		else if (pid > 0)
 			args->pids[i] = pid;
 		else if (pid == 0)
@@ -68,9 +49,39 @@ bool start_run(t_args *args)
 	return (true);
 }
 
-int stop_run(t_args *args)
+
+
+
+static int get_child_exit_die(t_args *args, pid_t *pid)
 {
-	int i;
+	int philo_exit_code;
+	int exit_code;
+
+	if (*pid && waitpid(*pid, &philo_exit_code, WNOHANG) != 0)
+	{
+		if (WIFEXITED(philo_exit_code))
+		{
+			exit_code = WEXITSTATUS(philo_exit_code);
+			if (exit_code == CHILD_EXIT_PHILO_DEAD)
+				return (kill_philos(args, 1));
+			if (exit_code == CHILD_EXIT_ERROR_PTHREAD
+			 	|| exit_code  == CHILD_EXIT_ERROR_SEM)
+				return (kill_philos(args, -1));
+			if (exit_code == CHILD_EXIT_PHILO_FULL)
+			{
+				args->philo_full_count +=1;
+				return (1);
+			}
+		}
+	}
+	return (0);
+}
+
+
+
+static int stop_run(t_args *args)
+{
+	unsigned int i;
 	int exit_code;
 
 	run_start_delay(args->zero_time);
@@ -96,15 +107,6 @@ int stop_run(t_args *args)
 	return (0);
 }
 
-bool run_stopped(t_args *args)
-{
-	bool aux;
-
-	sem_wait(args->sem_stop);
-	aux = args->stop_run;
-	sem_post(args->sem_stop);
-	return (aux);
-}
 
 int main(int argc, char **argv)
 {
@@ -112,7 +114,7 @@ int main(int argc, char **argv)
 
   args = NULL;
   if (argc -1  < 4 || argc -1 > 5)
-	return (print_msg("Incorrect args", NULL, EXIT_FAILURE));
+	return (print_msg(STR_USAGE, NULL, EXIT_FAILURE));
   if (!is_valid_input(argc, argv))
 	return (EXIT_FAILURE);
   args = init_args(argc, argv, 1);

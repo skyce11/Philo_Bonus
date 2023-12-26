@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:54:39 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 13:48:43 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 11:19:42 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,40 +64,22 @@ int	integer_atoi(char *str)
 bool is_valid_input(int argc, char **argv)
 {
 	int i;
-	//int n;
+	int n;
 
 	i = 1;
 	while(i < argc)
 	{
 		if (!only_digits(argv[i]))
-			return (print_msg("%s invalid input: %s\n: ", argv[i], false));
-	//	n = integer_atoi(argv[i]);
-	//	if (i == 1 && (n <= 0 || n > 200))
-	//		return (print_msg("%s invalid input: %s\n", "200", false));
-	//	if (i != 1 && n == -1)
-	//		return (print_msg("%s invalid input: %s\n", argv[i], false));
+			return (print_msg(STR_ERR_INPUT_DIGIT, argv[i], false));
+		n = integer_atoi(argv[i]);
+		if (i == 1 && (n <= 0 || n > MAX_PHILOS))
+			return (print_msg(STR_ERR_INPUT_POFLOW, STR_MAX_PHILOS, false));
+		if (i != 1 && n == -1)
+			return (print_msg(STR_ERR_INPUT_DIGIT, argv[i], false));
 		i++;
 	}
 	return (true);
 }
 
 
-int	n_argc(int argc, t_args *args)
-{
-	if (argc < 5)
-	{
-		write(1, "Wrong arguments input\n", 22);
-	}
-	if (argc > 6)
-	{
-		write(1, "Wrong arguments input\n", 22);
-	}
-	if (argc < 5 || argc > 6)
-	{
-		free(args);
-		args = NULL;
-		return (1);
-	}
-	return (0);
-}
 

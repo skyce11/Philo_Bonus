@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:39:53 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 14:46:37 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 12:43:55 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,25 @@
 #
 
 
+# define MAX_PHILOS 200
+# define STR_MAX_PHILOS "200"
+
+# define STR_PROG_NAME "philos:"
+# define STR_USAGE "%s usage: ./philo <number_of_philosophers> \
+<time_to_die> <time_to_eat> <time_to_sleep> \
+[number_of_times_each_philosopher_must_eat]\n"
+
+# define STR_ERR_INPUT_DIGIT "%s invalid input: %s: \
+not a valid unsigned integer between 0 and 2147483647.\n"
+
+# define STR_ERR_INPUT_POFLOW "%s invalid input: \
+there must be between 1 and %s philosophers.\n"
+
+# define STR_ERR_THREAD "%s error: Could not create thread.\n"
+# define STR_ERR_MALLOC "%s error: Could not allocate memory.\n"
+# define STR_ERR_SEM "%s error: Could not create semaphore.\n"
+# define STR_ERR_FORK "%s error: Could not fork child.\n"
+
 #define SEM_NAME_FORKS "/philo_global_forks"
 #define SEM_NAME_WRITE "/philo_global_write"
 #define SEM_NAME_FULL  "/philo_global_full"
@@ -45,30 +64,24 @@ typedef struct s_philo t_philo;
 
 typedef struct s_args
 {
-  time_t               zero_time;
-  int				    n_philo;
+  time_t				zero_time;
+  unsigned int			n_philo;
   time_t				t_die;
   time_t				t_eat;
   time_t				t_sleep;
-  int				    n_meal;  //posible problem here
- // int				must_eat_count;
-  
-
- 
-
-  sem_t             *sem_forks;
-  sem_t             *sem_write;
-  sem_t				*sem_philo_full;
-  int				philo_full_count;
-  sem_t             *sem_philo_dead;
-  sem_t				*sem_stop;
-  bool 				stop_run;
-  t_philo			*actual_philo;
-  t_philo			**philos;
-  pid_t 			*pids;
-
-  pthread_t			finish_meals_kill;
-  pthread_t			first_die_kill;
+  int				    n_meal;
+  sem_t					*sem_forks;
+  sem_t					*sem_write;
+  sem_t					*sem_philo_full;
+  unsigned int			philo_full_count;
+  sem_t					*sem_philo_dead;
+  sem_t					*sem_stop;
+  bool					stop_run;
+  t_philo				*actual_philo;
+  t_philo				**philos;
+  pid_t					*pids;
+  pthread_t				finish_meals_kill;
+  pthread_t				first_die_kill;
 
   
 
@@ -77,28 +90,19 @@ typedef struct s_args
 
 typedef struct s_philo
 {
-    pthread_t	personal_killer;
-	int		index;
-	int		times_eat;
-    time_t     last_meal;
-
-	int		forks_picked;
-    bool    hungry;
-	bool	satisfied;
-
-
-	sem_t		*sem_forks;
-	sem_t		*sem_write;
-	sem_t		*sem_philo_full;
-	sem_t		*sem_philo_dead;
-	sem_t		*sem_meal;
-	char 		*sem_meal_name;
-	
-    t_args          *args;
-	
-
-
-
+	pthread_t		personal_killer;
+	sem_t			*sem_forks;
+	sem_t			*sem_write;
+	sem_t			*sem_philo_full;
+	sem_t			*sem_philo_dead;
+	sem_t			*sem_meal;
+	char 			*sem_meal_name;
+	unsigned int	forks_picked;
+	unsigned int	index;
+	unsigned int	times_eat;
+	bool			satisfied;
+	time_t			last_meal;
+    t_args			*args;
 } 	t_philo;
 
 typedef enum e_status
@@ -115,7 +119,7 @@ typedef enum e_status
 
 char *ft_strcat(char *dst, const char *src);
 size_t ft_strlen(const char *str);
-char *ft_itoa(int n, size_t len);
+char *ft_utoa(unsigned int n, size_t len);
 void unlink_all(void);
 bool start_killer_threads(t_args *args);
 void print_sem_value(sem_t *sem);
@@ -123,7 +127,7 @@ void print_sem_value(sem_t *sem);
 //INIT_ALLL
 char 	*set_meal_name(const char*str, int index);
 bool set_philo_meal_name(t_philo *philo);
-t_philo		**init_philos(t_args *args);
+//t_philo		**init_philos(t_args *args);
 bool init_semaphores(t_args *args);
 t_args *init_args(int argc, char **argv, int i);
 
@@ -144,6 +148,12 @@ void child_exit(t_args *args, int exit_code);
 int args_cleaner(t_args *args, int exit_code);
 int sem_error_cleaner(t_args *args);
 
+//CLEANER
+void *free_args(t_args *args);
+int sem_error_cleaner(t_args *args);
+int args_cleaner(t_args *args, int exit_code);
+
+
 //MAIN
 
 bool run_stopped(t_args *args);
@@ -157,18 +167,18 @@ void 	print_general_status(t_philo *philo, bool killer, t_status status);
 
 // FT_KILL.C
 int kill_philos(t_args *args, int exit_code);
-void *first_die_kill(void *aux);
-void *finish_meals_kill(void *aux);
-bool kill_trigger(t_args  *args, t_philo *philo);
+void *ft_first_die_kill(void *aux);
+void *ft_finish_meals_kill(void *aux);
+//bool kill_trigger(t_args  *args, t_philo *philo);
 void *killler(void *aux);
 
 //ft_routine.c
-void ft_routine(t_philo *philo);
+//void ft_routine(t_philo *philo);
 void pick_fork(t_philo *philo);
 void start_routine(t_args *args);
-void eat_sleep_routine(t_philo *philo);
-void think_routine(t_philo *philo, bool silent);
-void only_one_philo(t_philo *philo);
+//void eat_sleep_routine(t_philo *philo);
+//void think_routine(t_philo *philo, bool silent);
+//void only_one_philo(t_philo *philo);
 
 //init_semaphores
 bool open_global_semaphores(t_philo *philo);

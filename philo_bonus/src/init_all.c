@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:26 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 15:11:28 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 11:53:57 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char 	*set_meal_name(const char*str, int index)
 		return (NULL);
 	sem_name[0] = '\0';
 	sem_name = ft_strcat(sem_name, str);
-	aux = ft_itoa(index, digit_count);
+	aux = ft_utoa(index, digit_count);
 	sem_name = ft_strcat(sem_name, aux);
 	free(aux);
 	return (sem_name);
@@ -51,24 +51,24 @@ bool set_philo_meal_name(t_philo *philo)
 	return (true);
 }
 
-t_philo		**init_philos(t_args *args)
+static t_philo		**init_philos(t_args *args)
 {
 	t_philo		**philos;
-	int 		i;
+	unsigned int 		i;
 
 	philos = malloc(sizeof(t_philo) * (args->n_philo +1));
 	if (!philos)
-		return (error_null("%s error: Could not allocate memory.\n", NULL, 0)); //FUNCION DE ERROR
+		return (error_null(STR_ERR_MALLOC, NULL, 0)); //FUNCION DE ERROR
 	i = 0;
 	while (i < args->n_philo)
 	{
 		philos[i] = malloc(sizeof(t_philo) * 1);
 		if (!philos[i])
-			return (error_null("%s error: Could not allocate memory.\n", NULL, 0));
+			return (error_null(STR_ERR_MALLOC, NULL, 0));
 		philos[i]->args = args;
 		philos[i]->index = i;
 		if (!set_philo_meal_name(philos[i]))
-			return (error_null("%s error: Could not allocate memory.\n", NULL, args)); //FUNCION ERROR
+			return (error_null(STR_ERR_MALLOC, NULL, args)); //FUNCION ERROR
 		philos[i]->times_eat = 0;
 		philos[i]->forks_picked = 0;
 		philos[i]->satisfied = false;

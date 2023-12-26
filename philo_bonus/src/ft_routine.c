@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 12:55:31 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 14:17:31 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 12:05:14 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 
-void eat_sleep_routine(t_philo *philo)
+static void eat_sleep_routine(t_philo *philo)
 {
 	pick_fork(philo);
 	pick_fork(philo);
@@ -34,7 +34,7 @@ void eat_sleep_routine(t_philo *philo)
 }
 
 
-void think_routine(t_philo *philo, bool silent)
+static void think_routine(t_philo *philo, bool silent)
 {
 	time_t time_to_think;
 
@@ -55,7 +55,7 @@ void think_routine(t_philo *philo, bool silent)
 
 
 
-void only_one_philo(t_philo *philo)
+static void only_one_philo(t_philo *philo)
 {
 	philo->sem_philo_full = sem_open(SEM_NAME_FULL, O_CREAT,
 					S_IRUSR | S_IWUSR, philo->args->n_philo);
@@ -76,7 +76,7 @@ void only_one_philo(t_philo *philo)
 }
 
 
-void ft_routine(t_philo *philo)
+static void ft_routine(t_philo *philo)
 {
 	if (philo->index % 2)
 	{

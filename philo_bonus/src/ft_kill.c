@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 10:37:23 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 13:58:53 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 12:52:44 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 
 int kill_philos(t_args *args, int exit_code)
 {
-	int i;
+	printf("Eres tu cabron?\n");
+	unsigned int i;
 	
 	i = 0;
-	while(i <args->n_philo)
+	while(i < args->n_philo)
 	{
 		kill(args->pids[i], SIGKILL);
 		i++;
@@ -27,28 +28,8 @@ int kill_philos(t_args *args, int exit_code)
 	return (exit_code);
 }
 
-void *first_die_kill(void *aux)
-{
-	t_args *args;
-	
-	args = (t_args*) aux;
-	if (args->n_philo == 1)
-		return (NULL);
-	run_start_delay(args->zero_time);
-	if (run_stopped(args) == true)
-		return (NULL);
-	sem_wait(args->sem_philo_dead);
-	if (run_stopped(args) == true)
-		return (NULL);
-	sem_wait(args->sem_stop);
-	args->stop_run = true;
-	kill_philos(args, EXIT_SUCCESS);
-	sem_post(args->sem_philo_full);
-	sem_post(args->sem_stop);
-	return (NULL);
-}
 
-void *finish_meals_kill(void *aux)
+void *ft_finish_meals_kill(void *aux)
 {
 	t_args *args;
 
@@ -75,7 +56,28 @@ void *finish_meals_kill(void *aux)
 	return (NULL);
 }
 
-bool kill_trigger(t_args  *args, t_philo *philo)
+void *ft_first_die_kill(void *aux)
+{
+	t_args *args;
+	
+	args = (t_args*) aux;
+	if (args->n_philo == 1)
+		return (NULL);
+	run_start_delay(args->zero_time);
+	if (run_stopped(args) == true)
+		return (NULL);
+	sem_wait(args->sem_philo_dead);
+	if (run_stopped(args) == true)
+		return (NULL);
+	sem_wait(args->sem_stop);
+	args->stop_run = true;
+	kill_philos(args, EXIT_SUCCESS);
+	sem_post(args->sem_philo_full);
+	sem_post(args->sem_stop);
+	return (NULL);
+}
+
+static bool kill_trigger(t_args  *args, t_philo *philo)
 {
 	sem_wait(philo->sem_meal);
 	if (ft_get_timestamp() - philo->last_meal >= args->t_die)
@@ -86,7 +88,7 @@ bool kill_trigger(t_args  *args, t_philo *philo)
 		return (true);
 	}
 	if (args->n_meal != -1  && philo->satisfied == false
-		&& philo->times_eat >= args->n_meal)
+		&& philo->times_eat >= (unsigned int) args->n_meal)
 	{
 		sem_post(philo->sem_philo_full);
 		philo->satisfied = true;
