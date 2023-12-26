@@ -85,7 +85,7 @@ bool kill_trigger(t_args  *args, t_philo *philo)
 		sem_post(philo->sem_meal);
 		return (true);
 	}
-	if (args->n_meal != 1  && philo->satisfied == false
+	if (args->n_meal != -1  && philo->satisfied == false
 		&& philo->times_eat >= args->n_meal)
 	{
 		sem_post(philo->sem_philo_full);
