@@ -6,15 +6,15 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 11:11:25 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 11:51:45 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:30:20 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../philo_bonus.h"
+#include "../philo_bonus.h"
 
-void *free_args(t_args *args)
+void	*free_args(t_args *args)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	if (!args)
 		return (NULL);
@@ -39,7 +39,7 @@ void *free_args(t_args *args)
 	return (NULL);
 }
 
-int sem_error_cleaner(t_args *args)
+int	sem_error_cleaner(t_args *args)
 {
 	sem_close(args->sem_forks);
 	sem_close(args->sem_write);
@@ -48,10 +48,9 @@ int sem_error_cleaner(t_args *args)
 	sem_close(args->sem_stop);
 	unlink_all();
 	return (error_failure(STR_ERR_SEM, NULL, args));
-
 }
 
-int args_cleaner(t_args *args, int exit_code)
+int	args_cleaner(t_args *args, int exit_code)
 {
 	if (args != NULL)
 	{
@@ -64,7 +63,6 @@ int args_cleaner(t_args *args, int exit_code)
 		sem_close(args->sem_stop);
 		unlink_all();
 		free_args(args);
-
 	}
 	exit(exit_code);
 }

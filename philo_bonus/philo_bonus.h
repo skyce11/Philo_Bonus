@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:39:53 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 12:43:55 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:50:05 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <semaphore.h>
 # include <signal.h>
 # include <fcntl.h>
-#
+
 
 
 # define MAX_PHILOS 200
@@ -47,46 +47,42 @@ there must be between 1 and %s philosophers.\n"
 # define STR_ERR_SEM "%s error: Could not create semaphore.\n"
 # define STR_ERR_FORK "%s error: Could not fork child.\n"
 
-#define SEM_NAME_FORKS "/philo_global_forks"
-#define SEM_NAME_WRITE "/philo_global_write"
-#define SEM_NAME_FULL  "/philo_global_full"
-#define SEM_NAME_DEAD  "/philo_global_dead"
-#define SEM_NAME_STOP  "/philo_global_stop"
-#define SEM_NAME_MEAL "/philo_local_meal"
+# define SEM_NAME_FORKS "/philo_global_forks"
+# define SEM_NAME_WRITE "/philo_global_write"
+# define SEM_NAME_FULL  "/philo_global_full"
+# define SEM_NAME_DEAD  "/philo_global_dead"
+# define SEM_NAME_STOP  "/philo_global_stop"
+# define SEM_NAME_MEAL "/philo_local_meal_"
 
-#define CHILD_EXIT_ERROR_PTHREAD 10
-#define CHILD_EXIT_ERROR_SEM 11
-#define CHILD_EXIT_PHILO_FULL 12
-#define CHILD_EXIT_PHILO_DEAD 13
+# define CHILD_EXIT_ERROR_PTHREAD 40
+# define CHILD_EXIT_ERROR_SEM 41
+# define CHILD_EXIT_PHILO_FULL 42
+# define CHILD_EXIT_PHILO_DEAD 43
 
-typedef struct s_philo t_philo;
+typedef struct s_philo	t_philo;
 
 
 typedef struct s_args
 {
-  time_t				zero_time;
-  unsigned int			n_philo;
-  time_t				t_die;
-  time_t				t_eat;
-  time_t				t_sleep;
-  int				    n_meal;
-  sem_t					*sem_forks;
-  sem_t					*sem_write;
-  sem_t					*sem_philo_full;
-  unsigned int			philo_full_count;
-  sem_t					*sem_philo_dead;
-  sem_t					*sem_stop;
-  bool					stop_run;
-  t_philo				*actual_philo;
-  t_philo				**philos;
-  pid_t					*pids;
-  pthread_t				finish_meals_kill;
-  pthread_t				first_die_kill;
-
-  
-
-
-} t_args;
+	time_t					zero_time;
+	unsigned int			n_philo;
+	time_t					t_die;
+	time_t					t_eat;
+	time_t					t_sleep;
+	int						n_meal;
+	sem_t					*sem_forks;
+	sem_t					*sem_write;
+	sem_t					*sem_philo_full;
+	unsigned int			philo_full_count;
+	sem_t					*sem_philo_dead;
+	sem_t					*sem_stop;
+	bool					stop_run;
+	t_philo					*actual_philo;
+	t_philo					**philos;
+	pid_t					*pids;
+	pthread_t				finish_meals_kill;
+	pthread_t				first_die_kill;
+}	t_args;
 
 typedef struct s_philo
 {
@@ -96,14 +92,14 @@ typedef struct s_philo
 	sem_t			*sem_philo_full;
 	sem_t			*sem_philo_dead;
 	sem_t			*sem_meal;
-	char 			*sem_meal_name;
+	char			*sem_meal_name;
 	unsigned int	forks_picked;
 	unsigned int	index;
 	unsigned int	times_eat;
 	bool			satisfied;
 	time_t			last_meal;
-    t_args			*args;
-} 	t_philo;
+	t_args			*args;
+}		t_philo;
 
 typedef enum e_status
 {

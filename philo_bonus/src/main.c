@@ -6,17 +6,15 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:52:50 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 12:51:03 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:45:06 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../philo_bonus.h"
+#include "../philo_bonus.h"
 
-
-
-bool run_stopped(t_args *args)
+bool	run_stopped(t_args *args)
 {
-	bool aux;
+	bool	aux;
 
 	sem_wait(args->sem_stop);
 	aux = args->stop_run;
@@ -24,12 +22,12 @@ bool run_stopped(t_args *args)
 	return (aux);
 }
 
-static bool start_run(t_args *args)
+static	bool	start_run(t_args *args)
 {
-	unsigned int i;
-	pid_t pid;
+	unsigned int	i;
+	pid_t			pid;
 
-	args->zero_time = ft_get_timestamp(); /*+ ((args->n_philo * 2) * 10);*/
+	args->zero_time = ft_get_timestamp();
 	i = -1;
 	while (++i < args->n_philo)
 	{
@@ -49,13 +47,10 @@ static bool start_run(t_args *args)
 	return (true);
 }
 
-
-
-
-static int get_child_exit_die(t_args *args, pid_t *pid)
+static	int	get_child_exit_die(t_args *args, pid_t *pid)
 {
-	int philo_exit_code;
-	int exit_code;
+	int	philo_exit_code;
+	int	exit_code;
 
 	if (*pid && waitpid(*pid, &philo_exit_code, WNOHANG) != 0)
 	{
@@ -65,11 +60,11 @@ static int get_child_exit_die(t_args *args, pid_t *pid)
 			if (exit_code == CHILD_EXIT_PHILO_DEAD)
 				return (kill_philos(args, 1));
 			if (exit_code == CHILD_EXIT_ERROR_PTHREAD
-			 	|| exit_code  == CHILD_EXIT_ERROR_SEM)
+				|| exit_code == CHILD_EXIT_ERROR_SEM)
 				return (kill_philos(args, -1));
 			if (exit_code == CHILD_EXIT_PHILO_FULL)
 			{
-				args->philo_full_count +=1;
+				args->philo_full_count += 1;
 				return (1);
 			}
 		}
@@ -77,19 +72,16 @@ static int get_child_exit_die(t_args *args, pid_t *pid)
 	return (0);
 }
 
-
-
-static int stop_run(t_args *args)
+static	int	stop_run(t_args *args)
 {
-	unsigned int i;
-	int exit_code;
+	unsigned int	i;
+	int				exit_code;
 
 	run_start_delay(args->zero_time);
-	
-	while(run_stopped(args) == false)
+	while (run_stopped(args) == false)
 	{
 		i = 0;
-		while(i < args->n_philo)
+		while (i < args->n_philo)
 		{
 			exit_code = get_child_exit_die(args, &args->pids[i]);
 			if (exit_code == 1 || exit_code == -1)
@@ -107,25 +99,21 @@ static int stop_run(t_args *args)
 	return (0);
 }
 
-
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-  t_args *args;
+	t_args	*args;
 
-  args = NULL;
-  if (argc -1  < 4 || argc -1 > 5)
-	return (print_msg(STR_USAGE, NULL, EXIT_FAILURE));
-  if (!is_valid_input(argc, argv))
-	return (EXIT_FAILURE);
-  args = init_args(argc, argv, 1);
-  if (!args)
-	return (EXIT_FAILURE);
-if (!start_run(args))
-	return (EXIT_FAILURE);
-if (stop_run(args) == -1)
-	return (args_cleaner(args, EXIT_FAILURE));
-return (args_cleaner(args, EXIT_SUCCESS));
-
-
-
+	args = NULL;
+	if (argc - 1 < 4 || argc -1 > 5)
+		return (print_msg(STR_USAGE, NULL, EXIT_FAILURE));
+	if (!is_valid_input(argc, argv))
+		return (EXIT_FAILURE);
+	args = init_args(argc, argv, 1);
+	if (!args)
+		return (EXIT_FAILURE);
+	if (!start_run(args))
+		return (EXIT_FAILURE);
+	if (stop_run(args) == -1)
+		return (args_cleaner(args, EXIT_FAILURE));
+	return (args_cleaner(args, EXIT_SUCCESS));
 }

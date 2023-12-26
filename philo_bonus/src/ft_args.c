@@ -6,34 +6,18 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:54:39 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 11:19:42 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:32:55 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../philo_bonus.h"
+#include "../philo_bonus.h"
 
-// static int	ft_isnumber(char *str)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] < '0' || str[i] > '9')
-// 		{
-// 			write(1, "Wrong argument\n", 15);
-// 			return (1);
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
-bool only_digits(char *str)
+bool	only_digits(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
 			return (false);
@@ -41,7 +25,6 @@ bool only_digits(char *str)
 	}
 	return (true);
 }
-
 
 int	integer_atoi(char *str)
 {
@@ -60,14 +43,13 @@ int	integer_atoi(char *str)
 	return ((int)nb);
 }
 
-
-bool is_valid_input(int argc, char **argv)
+bool	is_valid_input(int argc, char **argv)
 {
-	int i;
-	int n;
+	int	i;
+	int	n;
 
 	i = 1;
-	while(i < argc)
+	while (i < argc)
 	{
 		if (!only_digits(argv[i]))
 			return (print_msg(STR_ERR_INPUT_DIGIT, argv[i], false));
@@ -80,6 +62,3 @@ bool is_valid_input(int argc, char **argv)
 	}
 	return (true);
 }
-
-
-

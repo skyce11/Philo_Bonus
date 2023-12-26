@@ -6,12 +6,11 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 11:00:40 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/22 14:47:45 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:47:35 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../philo_bonus.h"
-
+#include "../philo_bonus.h"
 
 void	print_status(t_philo *philo, char *str)
 {
@@ -19,7 +18,7 @@ void	print_status(t_philo *philo, char *str)
 		philo->index + 1, str);
 }
 
-void print_general_status(t_philo *philo, bool killer, t_status status)
+void	print_general_status(t_philo *philo, bool killer, t_status status)
 {
 	sem_wait(philo->sem_write);
 	if (status == DIED)

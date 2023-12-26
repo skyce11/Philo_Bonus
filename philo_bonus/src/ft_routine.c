@@ -6,15 +6,13 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 12:55:31 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 12:05:14 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:38:52 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_bonus.h"
 
-
-
-static void eat_sleep_routine(t_philo *philo)
+static	void	eat_sleep_routine(t_philo *philo)
 {
 	pick_fork(philo);
 	pick_fork(philo);
@@ -33,14 +31,13 @@ static void eat_sleep_routine(t_philo *philo)
 	philo_sleep(philo->args-> t_sleep);
 }
 
-
-static void think_routine(t_philo *philo, bool silent)
+static	void	think_routine(t_philo *philo, bool silent)
 {
-	time_t time_to_think;
+	time_t	time_to_think;
 
 	sem_wait(philo->sem_meal);
 	time_to_think = (philo->args->t_die - (ft_get_timestamp()
-		- philo->last_meal) - philo->args->t_eat) / 2;
+				- philo->last_meal) - philo->args->t_eat) / 2;
 	sem_post(philo->sem_meal);
 	if (time_to_think < 0)
 		time_to_think = 0;
@@ -53,12 +50,10 @@ static void think_routine(t_philo *philo, bool silent)
 	philo_sleep(time_to_think);
 }
 
-
-
-static void only_one_philo(t_philo *philo)
+static	void	only_one_philo(t_philo *philo)
 {
 	philo->sem_philo_full = sem_open(SEM_NAME_FULL, O_CREAT,
-					S_IRUSR | S_IWUSR, philo->args->n_philo);
+			S_IRUSR | S_IWUSR, philo->args->n_philo);
 	if (philo->sem_philo_full == SEM_FAILED)
 		exit(CHILD_EXIT_ERROR_SEM);
 	sem_wait(philo->sem_philo_full);
@@ -75,8 +70,7 @@ static void only_one_philo(t_philo *philo)
 	exit(CHILD_EXIT_PHILO_DEAD);
 }
 
-
-static void ft_routine(t_philo *philo)
+static	void	ft_routine(t_philo *philo)
 {
 	if (philo->index % 2)
 	{
@@ -89,10 +83,9 @@ static void ft_routine(t_philo *philo)
 	}
 }
 
-
-void start_routine(t_args *args)
+void	start_routine(t_args *args)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = args->actual_philo;
 	if (philo->args->n_philo == 1)
@@ -115,11 +108,7 @@ void start_routine(t_args *args)
 	ft_routine(philo);
 }
 
-
-
-
-
-void pick_fork(t_philo *philo)
+void	pick_fork(t_philo *philo)
 {
 	sem_wait(philo->sem_forks);
 	sem_wait(philo->sem_meal);
@@ -130,16 +119,3 @@ void pick_fork(t_philo *philo)
 	philo->forks_picked += 1;
 	sem_post(philo->sem_meal);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

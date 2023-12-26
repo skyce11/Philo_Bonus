@@ -6,21 +6,18 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 10:37:23 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 12:52:44 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 14:36:22 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../philo_bonus.h"
+#include "../philo_bonus.h"
 
-
-
-int kill_philos(t_args *args, int exit_code)
+int	kill_philos(t_args *args, int exit_code)
 {
-	printf("Eres tu cabron?\n");
-	unsigned int i;
-	
+	unsigned int	i;
+
 	i = 0;
-	while(i < args->n_philo)
+	while (i < args->n_philo)
 	{
 		kill(args->pids[i], SIGKILL);
 		i++;
@@ -28,12 +25,11 @@ int kill_philos(t_args *args, int exit_code)
 	return (exit_code);
 }
 
-
-void *ft_finish_meals_kill(void *aux)
+void	*ft_finish_meals_kill(void *aux)
 {
-	t_args *args;
+	t_args	*args;
 
-	args = (t_args*) aux;
+	args = (t_args *) aux;
 	if (args->n_meal < 0 || args->t_die == 0
 		|| args->n_philo == 1)
 		return (NULL);
@@ -45,22 +41,23 @@ void *ft_finish_meals_kill(void *aux)
 		sem_wait(args->sem_philo_full);
 		if (run_stopped(args) == false)
 			args->philo_full_count += 1;
-		else 
+		else
 			return (NULL);
 	}
 	sem_wait(args->sem_stop);
 	args->stop_run = true;
+	printf("Es finish meals kills quien esta saltando\n");
 	kill_philos(args, EXIT_SUCCESS);
 	sem_post(args->sem_philo_dead);
 	sem_post(args->sem_stop);
 	return (NULL);
 }
 
-void *ft_first_die_kill(void *aux)
+void	*ft_first_die_kill(void *aux)
 {
-	t_args *args;
-	
-	args = (t_args*) aux;
+	t_args	*args;
+
+	args = (t_args *) aux;
 	if (args->n_philo == 1)
 		return (NULL);
 	run_start_delay(args->zero_time);
@@ -71,13 +68,14 @@ void *ft_first_die_kill(void *aux)
 		return (NULL);
 	sem_wait(args->sem_stop);
 	args->stop_run = true;
+	printf("Es first die kill quien esta saltando\n");
 	kill_philos(args, EXIT_SUCCESS);
 	sem_post(args->sem_philo_full);
 	sem_post(args->sem_stop);
 	return (NULL);
 }
 
-static bool kill_trigger(t_args  *args, t_philo *philo)
+static	bool	kill_trigger(t_args *args, t_philo *philo)
 {
 	sem_wait(philo->sem_meal);
 	if (ft_get_timestamp() - philo->last_meal >= args->t_die)
@@ -87,7 +85,7 @@ static bool kill_trigger(t_args  *args, t_philo *philo)
 		sem_post(philo->sem_meal);
 		return (true);
 	}
-	if (args->n_meal != -1  && philo->satisfied == false
+	if (args->n_meal != -1 && philo->satisfied == false
 		&& philo->times_eat >= (unsigned int) args->n_meal)
 	{
 		sem_post(philo->sem_philo_full);
@@ -97,17 +95,17 @@ static bool kill_trigger(t_args  *args, t_philo *philo)
 	return (false);
 }
 
-void *killler(void *aux)
+void	*killler(void *aux)
 {
-	t_args *args;
+	t_args	*args;
 
-	args = (t_args*)aux;
+	args = (t_args *)aux;
 	if (args->n_meal == 0)
 		return (NULL);
 	sem_wait(args->actual_philo->sem_philo_dead);
 	sem_wait(args->actual_philo->sem_philo_full);
 	run_start_delay(args->zero_time);
-	while(!kill_trigger(args, args->actual_philo))
+	while (!kill_trigger(args, args->actual_philo))
 	{
 		usleep(1000);
 		continue ;
