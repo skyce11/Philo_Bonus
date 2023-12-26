@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:39:53 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 14:50:05 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 16:33:39 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void open_semaphores(t_args *args, t_philo *philo);
 
 // Time_utils
 
-void run_start_delay(int zero_time);
+void run_start_delay(time_t zero_time);
 time_t	ft_get_timestamp(void);
 void philo_sleep(time_t sleep_time);
 

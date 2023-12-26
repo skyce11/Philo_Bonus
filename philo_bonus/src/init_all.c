@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:26 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 14:43:10 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 15:37:27 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ t_args	*init_args(int argc, char **argv, int i)
 	args->n_meal = -1;
 	args->philo_full_count = 0;
 	args->stop_run = false;
-	if (argc == 6)
+	if (argc - 1 == 5)
 		args->n_meal = integer_atoi(argv[i]);
 	if (!init_semaphores(args))
 		return (NULL);

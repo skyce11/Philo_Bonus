@@ -6,13 +6,13 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 14:47:58 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 14:48:04 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 16:33:29 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_bonus.h"
 
-void	run_start_delay(int zero_time)
+void	run_start_delay(time_t zero_time)
 {
 	while (ft_get_timestamp() < zero_time)
 		continue ;

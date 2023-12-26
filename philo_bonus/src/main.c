@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:52:50 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 14:45:06 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 17:12:52 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static	bool	start_run(t_args *args)
 	unsigned int	i;
 	pid_t			pid;
 
-	args->zero_time = ft_get_timestamp();
+	args->zero_time = ft_get_timestamp() + ((args->n_philo * 2) * 10);
 	i = -1;
 	while (++i < args->n_philo)
 	{
@@ -104,7 +104,7 @@ int	main(int argc, char **argv)
 	t_args	*args;
 
 	args = NULL;
-	if (argc - 1 < 4 || argc -1 > 5)
+	if (argc - 1 < 4 || argc - 1 > 5)
 		return (print_msg(STR_USAGE, NULL, EXIT_FAILURE));
 	if (!is_valid_input(argc, argv))
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: migonzal <migonzal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 10:37:23 by migonzal          #+#    #+#             */
-/*   Updated: 2023/12/26 14:36:22 by migonzal         ###   ########.fr       */
+/*   Updated: 2023/12/26 17:57:37 by migonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,16 @@ void	*ft_finish_meals_kill(void *aux)
 			return (NULL);
 		sem_wait(args->sem_philo_full);
 		if (run_stopped(args) == false)
+		{
+			//printf("Valor de times_eat %d\n", args->actual_philo->times_eat);
 			args->philo_full_count += 1;
+		}
 		else
 			return (NULL);
 	}
 	sem_wait(args->sem_stop);
 	args->stop_run = true;
-	printf("Es finish meals kills quien esta saltando\n");
+	printf("Eres tu perro\n");
 	kill_philos(args, EXIT_SUCCESS);
 	sem_post(args->sem_philo_dead);
 	sem_post(args->sem_stop);
@@ -68,7 +71,6 @@ void	*ft_first_die_kill(void *aux)
 		return (NULL);
 	sem_wait(args->sem_stop);
 	args->stop_run = true;
-	printf("Es first die kill quien esta saltando\n");
 	kill_philos(args, EXIT_SUCCESS);
 	sem_post(args->sem_philo_full);
 	sem_post(args->sem_stop);
@@ -85,6 +87,7 @@ static	bool	kill_trigger(t_args *args, t_philo *philo)
 		sem_post(philo->sem_meal);
 		return (true);
 	}
+	//printf("Valor de times_eat: %d\n", philo->times_eat);
 	if (args->n_meal != -1 && philo->satisfied == false
 		&& philo->times_eat >= (unsigned int) args->n_meal)
 	{
@@ -100,8 +103,8 @@ void	*killler(void *aux)
 	t_args	*args;
 
 	args = (t_args *)aux;
-	if (args->n_meal == 0)
-		return (NULL);
+	 if (args->n_meal == 0)
+	 	return (NULL);
 	sem_wait(args->actual_philo->sem_philo_dead);
 	sem_wait(args->actual_philo->sem_philo_full);
 	run_start_delay(args->zero_time);
